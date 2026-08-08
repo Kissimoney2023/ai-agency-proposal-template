@@ -1,14 +1,20 @@
 /* =========================================================================
    The Estimate — behaviour
    1. The live "cost of inaction" ledger (the signature element)
-   2. The Kit sign-up form: validation, loading, on-page success/failure
+   2. Lead capture → Google Sheet, then redirect to the Gumroad download
    ========================================================================= */
 
-/* ---- CONFIG — swap the form here if it ever changes --------------------- */
+/* ---- CONFIG — the only things you edit ---------------------------------- */
 const CONFIG = {
-  KIT_FORM_ID: "9765381",                    // Kit form: "AI Agency Proposal Template — Lead Magnet"
-  get KIT_ENDPOINT() { return `https://app.kit.com/forms/${this.KIT_FORM_ID}/subscriptions`; },
-  SENDER_EMAIL: "sahjohnny@gmail.com",       // shown in the success state; match your Kit sending address
+  // Paste your Google Apps Script Web App URL here (ends in /exec).
+  // See LEAD-CAPTURE-SETUP.md. Until it's set, the form still redirects to the
+  // download — it just won't record the lead.
+  SHEET_ENDPOINT: "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE",
+
+  // Where the visitor is sent to collect the template.
+  GUMROAD_URL: "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
+
+  SOURCE: "lead-magnet-landing",             // written to the sheet's Source column
   REP_FEE: 6800,                             // the representative project fee the cost is measured against
   WORK_WEEKS: 48,                            // working weeks per year used in the time calculation
 };
@@ -113,9 +119,9 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
 })();
 
 /* =========================================================================
-   2 · The Kit sign-up
+   2 · Lead capture → Google Sheet, then redirect to the Gumroad download
    ========================================================================= */
-(function signup() {
+(function capture() {
   const form   = $("[data-capture]");
   if (!form) return;
 
@@ -123,21 +129,21 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
   const submit = $("[data-submit]", form);
   const label  = $("[data-btn-label]", submit);
   const msg    = $("[data-msg]", form);
-  const done   = $("[data-done]");
 
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const endpointReady = () => /^https:\/\/script\.google\.com\/.+\/exec$/.test(CONFIG.SHEET_ENDPOINT);
 
   function setMsg(text, state) {
     if (!text) { msg.hidden = true; msg.textContent = ""; msg.removeAttribute("data-state"); return; }
     msg.hidden = false;
     msg.textContent = text;
-    msg.setAttribute("data-state", state);
+    msg.setAttribute("data-state", state || "");
   }
 
-  function loading(on) {
+  function loading(on, text) {
     submit.disabled = on;
     if (on) {
-      label.textContent = "Sending…";
+      label.textContent = text || "Saving…";
       submit.insertAdjacentHTML("afterbegin", '<span class="btn__spin" data-spin aria-hidden="true"></span>');
     } else {
       label.textContent = "Send me the template";
@@ -145,16 +151,34 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
     }
   }
 
-  function showSuccess(address) {
-    $("[data-done-email]", done).textContent = address;
-    $("[data-sender]", done).textContent = CONFIG.SENDER_EMAIL;
-    form.hidden = true;
-    done.hidden = false;
-    done.setAttribute("tabindex", "-1");
-    done.focus();
+  // Fire-and-forget POST to Apps Script. Uses a "simple" text/plain request so
+  // there's no CORS preflight, and keepalive/sendBeacon so it survives the redirect.
+  function recordLead(payload) {
+    if (!endpointReady()) return;                 // not wired yet — skip, still redirect
+    const body = JSON.stringify(payload);
+    try {
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon(CONFIG.SHEET_ENDPOINT, new Blob([body], { type: "text/plain;charset=UTF-8" }))) {
+        return;
+      }
+    } catch (_) { /* fall through */ }
+    try {
+      fetch(CONFIG.SHEET_ENDPOINT, {
+        method: "POST", mode: "no-cors", keepalive: true,
+        headers: { "Content-Type": "text/plain;charset=UTF-8" }, body,
+      });
+    } catch (_) { /* best effort */ }
   }
 
-  form.addEventListener("submit", async (e) => {
+  // Read what the visitor computed in the ledger, so each lead carries its
+  // self-reported cost of inaction.
+  function ledgerSnapshot() {
+    const method = $('input[name="method"]:checked')?.value === "leads" ? "Leads lost" : "Time wasted";
+    const annual = $('[data-out="annual"]')?.textContent.trim() || "";
+    return { method, annualCost: annual };
+  }
+
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
     const address = email.value.trim();
 
@@ -163,24 +187,20 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
 
     email.removeAttribute("aria-invalid");
     setMsg(null);
-    loading(true);
+    loading(true, "Opening your download…");
 
-    try {
-      const body = new URLSearchParams({ email_address: address });
-      const res = await fetch(CONFIG.KIT_ENDPOINT, {
-        method: "POST",
-        headers: { "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded" },
-        body,
-      });
+    const snap = ledgerSnapshot();
+    recordLead({
+      email: address,
+      method: snap.method,
+      annualCost: snap.annualCost,
+      source: CONFIG.SOURCE,
+      referrer: document.referrer || "direct",
+    });
 
-      if (!res.ok) throw new Error(`kit ${res.status}`);
-      // Kit returns JSON for the embed; any 2xx means the subscription was accepted.
-      await res.json().catch(() => ({}));
-      showSuccess(address);
-    } catch (err) {
-      loading(false);
-      setMsg("Couldn’t reach Kit just now. Check your connection and send again.", "error");
-    }
+    // Hand off to the download. Small delay lets the request flush on browsers
+    // without sendBeacon; sendBeacon/keepalive already survive the navigation.
+    window.setTimeout(() => { window.location.href = CONFIG.GUMROAD_URL; }, 250);
   });
 
   // Clear the error the moment they start fixing it

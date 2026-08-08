@@ -1,18 +1,21 @@
 # AI Agency Proposal Template — opt-in landing page
 
 A standalone static page. Plain semantic HTML + one modern CSS file + a little vanilla JS.
-No framework, no build step. The email lands in Kit (ConvertKit) and triggers the existing
-delivery automation.
+No framework, no build step. On submit the lead is written to a Google Sheet (via a Google Apps
+Script Web App) and the visitor is redirected to the Gumroad download — see
+[LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md).
 
 ```
 public/               <- the deployable site; ONLY this directory ships
   index.html          markup + meta/OG/Twitter
   styles.css          one layered stylesheet (design tokens as custom properties)
-  app.js              the live cost-of-inaction ledger + the Kit form (config at the top)
+  app.js              the live cost-of-inaction ledger + lead capture (config at the top)
   assets/fonts/       self-hosted Instrument Sans + Spectral (latin-subset woff2)
   assets/img/         favicon, apple-touch-icon, og.png (1200×630)
 netlify.toml          Netlify config (publish = "public")
 vercel.json           Vercel config (outputDirectory = "public")
+automation/           the Google Apps Script that receives leads — NOT shipped
+LEAD-CAPTURE-SETUP.md  how the Sheet + Gumroad flow is wired
 DESIGN-NOTES.md       tokens, type rationale, the signature element, what was tried and rejected
 _source/              provided source images + the HTML that generates og.png/the icon — NOT shipped
 ```
@@ -32,27 +35,26 @@ cd public && python -m http.server 4321
 Then open <http://127.0.0.1:4321/>. (Serving over http, not opening the file directly, so the
 self-hosted fonts load.)
 
-## Swap the Kit form
+## Lead capture (Google Sheet → Gumroad)
 
-Everything Kit-related is one object at the top of [`app.js`](app.js):
+All the wiring is one object at the top of [`public/app.js`](public/app.js):
 
 ```js
 const CONFIG = {
-  KIT_FORM_ID: "9765381",              // Kit form "AI Agency Proposal Template — Lead Magnet"
-  SENDER_EMAIL: "sahjohnny@gmail.com", // shown in the success state — match your Kit sending address
-  REP_FEE: 6800,                       // the representative project fee the cost is measured against
-  WORK_WEEKS: 48,                      // working weeks/year used by the Time calculation
+  SHEET_ENDPOINT: "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE", // the deployed Apps Script /exec URL
+  GUMROAD_URL:    "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
+  SOURCE:         "lead-magnet-landing",
+  REP_FEE:        6800,   // representative project fee the cost is measured against
+  WORK_WEEKS:     48,     // working weeks/year used by the Time calculation
 };
 ```
 
-- **To point at a different form:** change `KIT_FORM_ID` to the new numeric form id. The endpoint
-  (`https://app.kit.com/forms/<id>/subscriptions`) is derived from it. Find the id via Kit →
-  the form's embed, or the Kit API `list_forms` (the id is the number, not the `2b38d0cd87` slug).
-- The form posts with `fetch` and `Accept: application/json`, so the visitor stays on the page and
-  gets an on-page success state instead of Kit's built-in redirect. The field name Kit expects is
-  `email_address` (already set on the `<input>`).
-- This form is **double opt-in** — the success copy says "check your inbox to confirm" on purpose.
-  If you switch the form to single opt-in, soften that line in `index.html` (`[data-done]`).
+- **First-time setup** (create the Apps Script, deploy it, paste the `/exec` URL): follow
+  [LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md). The Google Sheet is already created.
+- **Change the download link:** edit `GUMROAD_URL`.
+- Until `SHEET_ENDPOINT` is a real `/exec` URL, the form still redirects to the download — it just
+  doesn't record the lead. Each lead row also carries the **annual cost of inaction** the visitor
+  computed on the page, so you can sort your list by pain.
 
 ## Update the share image / favicon
 
