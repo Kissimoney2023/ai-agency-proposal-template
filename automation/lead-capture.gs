@@ -22,8 +22,10 @@
  */
 
 var CONFIG = {
-  GUMROAD_MAGNET: 'https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile',
-  GUMROAD_KIT:    'https://buildwithsaah.gumroad.com/l/ai-agency-builder-kit',
+  // Product links delivered in the day-0 email. Both MUST be shared "Anyone with the link".
+  NOTION_URL:  'https://app.notion.com/p/The-AI-Agency-Proposal-Template-3b213e85cc0b81dd89b2f9a89e8c3b6b?source=copy_link',
+  PDF_URL:     'https://drive.google.com/file/d/1OWFjRKwd7Hsues2WXI_SA6msp77w6xjG/view?usp=sharing',
+  GUMROAD_KIT: 'https://buildwithsaah.gumroad.com/l/ai-agency-builder-kit',   // pitched on day 8
   FROM_NAME:      'Saah',
   REPLY_TO:       'sahjohnny@gmail.com',
   MAGNET_SUBJECT: 'The AI Agency Proposal Template'
@@ -168,13 +170,15 @@ function processSequence() {
    ========================================================================= */
 function sendMagnet_(to) {
   var inner =
-    '<p>Here’s the template.</p>' +
-    '<p>' + button_('Get the template', CONFIG.GUMROAD_MAGNET) + '</p>' +
-    '<p>A Notion page you can duplicate into your workspace, plus a 12-page PDF.</p>' +
+    '<p>Here’s your template — both formats:</p>' +
+    '<p>' + button_('Open the Notion template', CONFIG.NOTION_URL) + '</p>' +
+    '<p style="margin-top:-4px;color:#55607A">Open it, then click <b>Duplicate</b> (top-right) to copy it into your own workspace.</p>' +
+    '<p>' + button_('Download the 12-page PDF', CONFIG.PDF_URL) + '</p>' +
     '<p>Seven blocks, in order, with a fully worked example. Block two — the cost of inaction — is the one almost nobody writes; it’s built out in full inside. Swap the nouns and send it.</p>';
   var plain =
-    'Here’s the template.\n\nGet it here: ' + CONFIG.GUMROAD_MAGNET + '\n' +
-    'A Notion page you can duplicate into your workspace, plus a 12-page PDF.\n\n' +
+    'Here’s your template — both formats:\n\n' +
+    'Notion template (open it, then Duplicate into your workspace):\n' + CONFIG.NOTION_URL + '\n\n' +
+    '12-page PDF:\n' + CONFIG.PDF_URL + '\n\n' +
     'Seven blocks, in order, with a fully worked example. Block two — the cost of inaction — ' +
     'is the one almost nobody writes; it’s built out in full inside. Swap the nouns and send it.';
   send_(to, CONFIG.MAGNET_SUBJECT, inner, plain);
