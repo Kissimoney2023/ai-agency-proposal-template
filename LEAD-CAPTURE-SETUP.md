@@ -2,13 +2,16 @@
 
 The form no longer talks to ConvertKit. On submit it now:
 
-1. records the lead in your Google Sheet, then
-2. redirects the visitor to the Gumroad download page.
+1. records the lead in your Google Sheet,
+2. **emails the lead the template** (from your Gmail), and
+3. redirects the visitor to the Gumroad download page.
 
 ```
 visitor enters email
       │
-      ├─▶ POST to a Google Apps Script Web App  ─▶  new row in the Sheet
+      ├─▶ POST to a Google Apps Script Web App
+      │        ├─▶ new row in the Sheet
+      │        └─▶ emails the lead the template link (MailApp, from your Gmail)
       │
       └─▶ redirect to  buildwithsaah.gumroad.com/l/ai-agency-proposal-template
 ```
@@ -55,6 +58,33 @@ it to work your highest-pain leads first.
 ### Check it's live
 - Paste the `/exec` URL into a browser → you should see `{"result":"ok","ping":true}`.
 - Submit the real form once → a new row should appear in the sheet within a second or two.
+
+## Emailing the lead the template
+
+`lead-capture.gs` emails each lead the template with `MailApp` (from your Gmail, sender name
+"Saah", reply-to your address). Edit the copy or link in the `sendLeadMagnet_` function /
+`CONFIG` block at the top.
+
+**Sending email needs a new permission**, so after updating the script you must re-authorize once
+and redeploy:
+
+1. Paste the updated `lead-capture.gs`, **Save**.
+2. In the editor's function dropdown pick **`sendTestEmail`** → **Run**. Approve the
+   **"Send email as you"** permission when prompted. This also sends the template email to your own
+   address so you can preview it — check your inbox.
+3. **Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.** (The `/exec` URL
+   stays the same — no site change needed.)
+
+The **Lead Magnet Sent** column now records `Email sent` (or `Email failed: …`) per lead, so you can
+see delivery at a glance.
+
+> **Quota:** a consumer Gmail account can send ~100 emails/day via Apps Script (Workspace ~1,500).
+> Fine for a lead magnet; if you expect more, use a dedicated sender.
+
+### Building sequences later
+This same script is the hook for follow-up emails. To drip a sequence, add a time-based trigger
+(**Triggers ⏰ → Add trigger**) that runs a function scanning the sheet's **Status** column and
+emails leads at the right step, updating Status as it goes. Say the word and it can be scaffolded.
 
 ## Changing things later
 
