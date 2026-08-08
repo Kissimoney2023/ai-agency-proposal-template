@@ -1,8 +1,9 @@
 # AI Agency Proposal Template — opt-in landing page
 
 A standalone static page. Plain semantic HTML + one modern CSS file + a little vanilla JS.
-No framework, no build step. On submit the lead is captured by Netlify Forms and the visitor is
-redirected to the Gumroad download — see [LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md).
+No framework, no build step. On submit the lead is written to a Google Sheet (via a Google Apps
+Script Web App) and the visitor is redirected to the Gumroad download — see
+[LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md).
 
 ```
 public/               <- the deployable site; ONLY this directory ships
@@ -13,7 +14,8 @@ public/               <- the deployable site; ONLY this directory ships
   assets/img/         favicon, apple-touch-icon, og.png (1200×630)
 netlify.toml          Netlify config (publish = "public")
 vercel.json           Vercel config (outputDirectory = "public")
-LEAD-CAPTURE-SETUP.md  how the Netlify Forms + Gumroad flow works
+automation/           the Google Apps Script that receives leads — NOT shipped
+LEAD-CAPTURE-SETUP.md  how the Sheet + Gumroad flow is wired
 DESIGN-NOTES.md       tokens, type rationale, the signature element, what was tried and rejected
 _source/              provided source images + the HTML that generates og.png/the icon — NOT shipped
 ```
@@ -33,27 +35,26 @@ cd public && python -m http.server 4321
 Then open <http://127.0.0.1:4321/>. (Serving over http, not opening the file directly, so the
 self-hosted fonts load.)
 
-## Lead capture (Netlify Forms → Gumroad)
+## Lead capture (Google Sheet → Gumroad)
 
-Leads are captured by **Netlify Forms** — no external service, nothing to paste. Config lives at the
-top of [`public/app.js`](public/app.js):
+All the wiring is one object at the top of [`public/app.js`](public/app.js):
 
 ```js
 const CONFIG = {
-  FORM_NAME:   "lead-magnet",   // matches <form name> + the hidden form-name field
-  GUMROAD_URL: "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
-  SOURCE:      "lead-magnet-landing",
-  REP_FEE:     6800,   // representative project fee the cost is measured against
-  WORK_WEEKS:  48,     // working weeks/year used by the Time calculation
+  SHEET_ENDPOINT: "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE", // the deployed Apps Script /exec URL
+  GUMROAD_URL:    "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
+  SOURCE:         "lead-magnet-landing",
+  REP_FEE:        6800,   // representative project fee the cost is measured against
+  WORK_WEEKS:     48,     // working weeks/year used by the Time calculation
 };
 ```
 
-- Submissions appear in **Netlify → your site → Forms → lead-magnet** after the first deploy + a
-  test submit. Set up email notifications and CSV export there. Full details:
-  [LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md).
-- Each submission carries the **annual cost of inaction** the visitor computed, so you can sort your
-  list by pain.
+- **First-time setup** (create the Apps Script, deploy it, paste the `/exec` URL): follow
+  [LEAD-CAPTURE-SETUP.md](LEAD-CAPTURE-SETUP.md). The Google Sheet is already created.
 - **Change the download link:** edit `GUMROAD_URL`.
+- Until `SHEET_ENDPOINT` is a real `/exec` URL, the form still redirects to the download — it just
+  doesn't record the lead. Each lead row also carries the **annual cost of inaction** the visitor
+  computed on the page, so you can sort your list by pain.
 
 ## Update the share image / favicon
 

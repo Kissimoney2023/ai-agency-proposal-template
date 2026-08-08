@@ -6,14 +6,15 @@
 
 /* ---- CONFIG — the only things you edit ---------------------------------- */
 const CONFIG = {
-  // Leads are captured by Netlify Forms — no external service, nothing to paste.
-  // Must match the <form name="…"> and its hidden form-name field in index.html.
-  FORM_NAME: "lead-magnet",
+  // Paste your Google Apps Script Web App URL here (ends in /exec).
+  // See LEAD-CAPTURE-SETUP.md. Until it's set, the form still redirects to the
+  // download — it just won't record the lead.
+  SHEET_ENDPOINT: "https://script.google.com/macros/s/AKfycbw5VZxb16oRt3UwEWOPxB3gvfN2oL-hz7hNYoxHg0rg3a6nIfVvEVWre4sWj3MNWAWISw/exec",
 
   // Where the visitor is sent to collect the template.
   GUMROAD_URL: "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
 
-  SOURCE: "lead-magnet-landing",             // recorded on each submission
+  SOURCE: "lead-magnet-landing",             // written to the sheet's Source column
   REP_FEE: 6800,                             // the representative project fee the cost is measured against
   WORK_WEEKS: 48,                            // working weeks per year used in the time calculation
 };
@@ -118,7 +119,7 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
 })();
 
 /* =========================================================================
-   2 · Lead capture → Netlify Forms, then redirect to the Gumroad download
+   2 · Lead capture → Google Sheet, then redirect to the Gumroad download
    ========================================================================= */
 (function capture() {
   const form   = $("[data-capture]");
@@ -130,7 +131,7 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
   const msg    = $("[data-msg]", form);
 
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const setHidden = (key, val) => { const el = $(`[data-hidden="${key}"]`); if (el) el.value = val; };
+  const endpointReady = () => /^https:\/\/script\.google\.com\/.+\/exec$/.test(CONFIG.SHEET_ENDPOINT);
 
   function setMsg(text, state) {
     if (!text) { msg.hidden = true; msg.textContent = ""; msg.removeAttribute("data-state"); return; }
@@ -150,26 +151,31 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
     }
   }
 
-  // Post the form to Netlify (same-origin, so no CORS). keepalive lets it finish
-  // as the page redirects to the download.
-  function submitToNetlify() {
-    const body = new URLSearchParams(new FormData(form)).toString();
-    return fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-      keepalive: true,
-    });
+  // Fire-and-forget POST to Apps Script. Uses a "simple" text/plain request so
+  // there's no CORS preflight, and keepalive/sendBeacon so it survives the redirect.
+  function recordLead(payload) {
+    if (!endpointReady()) return;                 // not wired yet — skip, still redirect
+    const body = JSON.stringify(payload);
+    try {
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon(CONFIG.SHEET_ENDPOINT, new Blob([body], { type: "text/plain;charset=UTF-8" }))) {
+        return;
+      }
+    } catch (_) { /* fall through */ }
+    try {
+      fetch(CONFIG.SHEET_ENDPOINT, {
+        method: "POST", mode: "no-cors", keepalive: true,
+        headers: { "Content-Type": "text/plain;charset=UTF-8" }, body,
+      });
+    } catch (_) { /* best effort */ }
   }
 
   // Read what the visitor computed in the ledger, so each lead carries its
   // self-reported cost of inaction.
-  function fillLedgerFields() {
+  function ledgerSnapshot() {
     const method = $('input[name="method"]:checked')?.value === "leads" ? "Leads lost" : "Time wasted";
-    setHidden("method",   method);
-    setHidden("annual",   $('[data-out="annual"]')?.textContent.trim() || "");
-    setHidden("source",   CONFIG.SOURCE);
-    setHidden("referrer", document.referrer || "direct");
+    const annual = $('[data-out="annual"]')?.textContent.trim() || "";
+    return { method, annualCost: annual };
   }
 
   form.addEventListener("submit", (e) => {
@@ -183,12 +189,18 @@ const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)
     setMsg(null);
     loading(true, "Opening your download…");
 
-    fillLedgerFields();
-    try { submitToNetlify(); } catch (_) { /* keepalive best effort */ }
+    const snap = ledgerSnapshot();
+    recordLead({
+      email: address,
+      method: snap.method,
+      annualCost: snap.annualCost,
+      source: CONFIG.SOURCE,
+      referrer: document.referrer || "direct",
+    });
 
-    // Hand off to the download. The 300ms lets the POST flush before we navigate;
-    // keepalive already makes it survive the navigation.
-    window.setTimeout(() => { window.location.href = CONFIG.GUMROAD_URL; }, 300);
+    // Hand off to the download. Small delay lets the request flush on browsers
+    // without sendBeacon; sendBeacon/keepalive already survive the navigation.
+    window.setTimeout(() => { window.location.href = CONFIG.GUMROAD_URL; }, 250);
   });
 
   // Clear the error the moment they start fixing it
