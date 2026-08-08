@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>The AI Agency Proposal Template — a free, worked proposal structure</title>
+  <meta name="description" content="The seven-block proposal structure that turns six-hour proposals into forty-five-minute ones — with a fully worked example, the cost-of-inaction formulas, and a three-tier pricing rule. Free Notion page + 12-page PDF." />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0F1729" />
+  <link rel="canonical" href="https://proposal.buildwithsaah.com/" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Saah · Proposal Template" />
+  <meta property="og:title" content="Steal the proposal structure that closes on arithmetic, not price." />
+  <meta property="og:description" content="Seven blocks, in order, with a fully worked example. The one that puts a dollar figure on the problem before it quotes a fee. Free — a Notion page you can duplicate, plus a 12-page PDF." />
+  <meta property="og:url" content="https://proposal.buildwithsaah.com/" />
+  <meta property="og:image" content="https://proposal.buildwithsaah.com/assets/img/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="A proposal ledger: an annual cost of inaction of $83,200 set against a representative project fee of $6,800." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Steal the proposal structure that closes on arithmetic, not price." />
+  <meta name="twitter:description" content="Seven blocks, in order, with a fully worked example. Free — a Notion page + 12-page PDF." />
+  <meta name="twitter:image" content="https://proposal.buildwithsaah.com/assets/img/og.png" />
+
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+
+  <!-- Preload the faces used above the fold — no swap flash, no layout shift -->
+  <link rel="preload" href="/assets/fonts/instrument-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/instrument-sans-600.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/spectral-600.woff2" as="font" type="font/woff2" crossorigin />
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#get-it">Skip to the sign-up</a>
+
+  <!-- Letterhead ---------------------------------------------------------- -->
+  <header class="letterhead" role="banner">
+    <div class="wrap letterhead__row">
+      <a class="mark" href="/" aria-label="Saah — home">
+        <span class="mark__glyph" aria-hidden="true"></span>
+        <span class="mark__text">SAAH</span>
+        <span class="mark__sep" aria-hidden="true">/</span>
+        <span class="mark__doc">PROPOSAL&nbsp;TEMPLATE</span>
+      </a>
+      <p class="letterhead__meta">Ref. <span class="tnum">AAP-07</span> · Free template</p>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero: the live cost-of-inaction ledger --------------------------- -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero__grid">
+
+        <div class="hero__lede">
+          <p class="eyebrow">Free template</p>
+          <h1 id="hero-title" class="display">
+            Steal the proposal structure that turned
+            <span class="display__hi">six-hour</span> proposals into
+            <span class="display__hi">forty-five-minute</span> ones.
+          </h1>
+          <p class="sub">Seven blocks, in this order, with a fully worked example.</p>
+          <p class="reassure">Free. No upsell sequence you can’t leave — it just gets sent to you.</p>
+        </div>
+
+        <!-- The signature element: Block 02, live -->
+        <figure class="ledger" aria-labelledby="ledger-cap">
+          <figcaption class="ledger__cap" id="ledger-cap">
+            <span class="ledger__block">Block <span class="tnum">02</span></span>
+            <span class="ledger__title">Cost of inaction</span>
+            <span class="ledger__live" data-live>live</span>
+          </figcaption>
+
+          <div class="ledger__method" role="radiogroup" aria-label="How do you want to estimate the cost?">
+            <label class="seg">
+              <input type="radio" name="method" value="time" checked />
+              <span>Time wasted</span>
+            </label>
+            <label class="seg">
+              <input type="radio" name="method" value="leads" />
+              <span>Leads lost</span>
+            </label>
+          </div>
+
+          <!-- Time inputs -->
+          <div class="ledger__inputs" data-panel="time">
+            <div class="field">
+              <label for="hours">Hours lost per week <span class="field__hint">on a bad week</span></label>
+              <div class="field__control">
+                <input id="hours" type="number" inputmode="numeric" min="0" step="1" value="6" data-input="hours" aria-describedby="hours-unit" />
+                <span class="field__unit" id="hours-unit">hrs</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="rate">Loaded hourly rate</label>
+              <div class="field__control">
+                <span class="field__cur" aria-hidden="true">$</span>
+                <input id="rate" type="number" inputmode="numeric" min="0" step="5" value="90" data-input="rate" aria-describedby="rate-unit" />
+                <span class="field__unit" id="rate-unit">/hr</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leads inputs -->
+          <div class="ledger__inputs" data-panel="leads" hidden>
+            <div class="field">
+              <label for="leads">Leads missed per month</label>
+              <div class="field__control">
+                <input id="leads" type="number" inputmode="numeric" min="0" step="1" value="4" data-input="leads" />
+                <span class="field__unit">/mo</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="close">Close rate</label>
+              <div class="field__control">
+                <input id="close" type="number" inputmode="numeric" min="0" max="100" step="1" value="25" data-input="close" />
+                <span class="field__unit">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="deal">Average deal size</label>
+              <div class="field__control">
+                <span class="field__cur" aria-hidden="true">$</span>
+                <input id="deal" type="number" inputmode="numeric" min="0" step="100" value="6800" data-input="deal" />
+              </div>
+            </div>
+          </div>
+
+          <!-- The maths, printed like a statement -->
+          <dl class="ledger__out" aria-live="polite">
+            <div class="row" data-row="periodic">
+              <dt data-label="periodic">Weekly cost</dt>
+              <dd class="tnum" data-out="periodic">$540</dd>
+            </div>
+            <div class="row row--total">
+              <dt>Annual cost of inaction</dt>
+              <dd class="tnum amberfig" data-out="annual">$25,920</dd>
+            </div>
+          </dl>
+
+          <div class="ledger__against">
+            <p class="against__label">— against a representative project fee —</p>
+            <div class="row">
+              <dt class="row__k">Project fee</dt>
+              <dd class="tnum row__v" data-out="fee">$6,800 <span class="once">once</span></dd>
+            </div>
+            <p class="verdict" data-out="verdict">
+              The problem costs <span class="tnum" data-out="ratio">3.8×</span> the fix — every year.
+            </p>
+          </div>
+        </figure>
+
+      </div>
+
+      <!-- Primary conversion surface: the signature line -->
+      <div class="wrap">
+        <div class="signline" id="get-it">
+          <form class="capture" data-capture novalidate>
+            <label class="capture__label" for="email">Send it to</label>
+            <div class="capture__field">
+              <input
+                id="email" name="email_address" type="email" autocomplete="email"
+                placeholder="you@studio.com" required
+                aria-describedby="capture-note" data-email />
+              <button type="submit" class="btn btn--primary" data-submit>
+                <span data-btn-label>Send me the template</span>
+              </button>
+            </div>
+            <p class="capture__msg" data-msg role="status" aria-live="polite" hidden></p>
+            <p class="capture__note" id="capture-note">One email, immediately. Unsubscribe any time.</p>
+          </form>
+
+          <!-- Success replaces the form in place -->
+          <div class="done" data-done hidden>
+            <p class="done__k">Check your inbox to confirm.</p>
+            <p class="done__b">
+              A one-click confirmation is on its way to <strong data-done-email>your address</strong>.
+              Confirm it and the template lands right after — a Notion page you can duplicate,
+              plus the 12-page PDF. It comes from <strong data-sender>the sender</strong>;
+              if it’s not there in two minutes, look in spam.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Argument ---------------------------------------------------------- -->
+    <section class="argument" aria-labelledby="arg-title">
+      <div class="wrap measure">
+        <h2 id="arg-title" class="h2">Most proposals lose in the second block.</h2>
+        <p>Not on price. On the fact that the price is sitting there with nothing to be compared against.</p>
+        <p>If a buyer doesn’t know what the problem is costing them, then <span class="tnum">$6,800</span> is just a large number. If they know it’s costing <span class="tnum">$83,200</span> a year, <span class="tnum">$6,800</span> is arithmetic.</p>
+        <p class="argument__punch">That’s block two. Almost nobody writes it.</p>
+        <p>The template shows exactly how to build it — including five formulas for getting a real number out of a buyer, depending on what they can actually estimate.</p>
+      </div>
+    </section>
+
+    <!-- What's inside: a line-item bill of contents ---------------------- -->
+    <section class="inside" aria-labelledby="inside-title">
+      <div class="wrap">
+        <header class="inside__head">
+          <h2 id="inside-title" class="h2">What’s inside</h2>
+          <p class="inside__sub">Six items — but they are not six equal things. One is the whole reason to duplicate the page.</p>
+        </header>
+
+        <ol class="bill">
+          <li class="bill__item">
+            <span class="bill__no tnum">01</span>
+            <span class="bill__body">
+              <span class="bill__name">The seven-block structure</span>
+              <span class="bill__desc">What goes in each block, why the order is fixed, and the specific mistake that kills each one.</span>
+            </span>
+            <span class="bill__lead" aria-hidden="true"></span>
+            <span class="bill__count tnum">7 blocks</span>
+          </li>
+
+          <li class="bill__item">
+            <span class="bill__no tnum">02</span>
+            <span class="bill__body">
+              <span class="bill__name">The cost-of-inaction formulas</span>
+              <span class="bill__desc">Five ways to get a real dollar figure out of a buyer: time waste, lost leads, slow response, errors, capacity.</span>
+            </span>
+            <span class="bill__lead" aria-hidden="true"></span>
+            <span class="bill__count tnum">5 formulas</span>
+          </li>
+
+          <!-- The prize: breaks the list to show a real, legible fragment -->
+          <li class="bill__item bill__item--prize">
+            <div class="prize__head">
+              <span class="bill__no tnum">03</span>
+              <span class="bill__body">
+                <span class="bill__name">A complete worked proposal</span>
+                <span class="bill__desc">All seven blocks, filled in, for a real service at real prices. Swap the nouns and send it.</span>
+              </span>
+              <span class="prize__tag">The one you came for</span>
+            </div>
+
+            <!-- Rendered artifact fragment (not a stock mockup) -->
+            <div class="doc" aria-label="A fragment of the worked proposal">
+              <aside class="doc__index" aria-hidden="true">
+                <span>01 Executive summary</span>
+                <span>02 Cost of inaction</span>
+                <span>03 Scope of work</span>
+                <span>04 Investment</span>
+                <span>05 Not included</span>
+                <span>06 Timeline</span>
+                <span>07 Next step</span>
+              </aside>
+
+              <div class="doc__sheet">
+                <p class="doc__kicker">Prepared for Northwind Logistics · Draft</p>
+                <h3 class="doc__title">Invoice automation &amp; exception routing</h3>
+
+                <div class="doc__block">
+                  <p class="doc__bno">Block 02 · Cost of inaction</p>
+                  <p class="doc__lead">
+                    Three staff spend <span class="tnum">9</span> hours a week each keying invoices by hand and
+                    chasing the ones that bounce. At a loaded rate of <span class="tnum">$64</span>/hr:
+                  </p>
+                  <table class="doc__calc">
+                    <tbody>
+                      <tr><td>27 hrs/week × $64</td><td class="tnum">$1,728 / wk</td></tr>
+                      <tr><td>Mis-keys &amp; late fees</td><td class="tnum">$4,900 / yr</td></tr>
+                      <tr class="doc__calc-total"><th scope="row">Annual cost of inaction</th><td class="tnum">$83,200 / yr</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="doc__block">
+                  <p class="doc__bno">Block 04 · Investment</p>
+                  <table class="doc__tiers">
+                    <thead>
+                      <tr><th scope="col">Tier</th><th scope="col">Scope</th><th scope="col" class="ta-r">Fee</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Core</td><td>Capture + validation</td><td class="tnum ta-r">$6,800</td></tr>
+                      <tr class="doc__tier--mid"><td>Standard</td><td>+ exception routing</td><td class="tnum ta-r">$11,400</td></tr>
+                      <tr><td>Full</td><td>+ ledger sync, alerts</td><td class="tnum ta-r">$18,900</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <p class="doc__more">…blocks 05–07 continue in the template.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="bill__item">
+            <span class="bill__no tnum">04</span>
+            <span class="bill__body">
+              <span class="bill__name">The three-tier pricing rule</span>
+              <span class="bill__desc">Why one price gets compared to nothing — and why a fake bottom tier costs you deals.</span>
+            </span>
+            <span class="bill__lead" aria-hidden="true"></span>
+            <span class="bill__count tnum">3 tiers</span>
+          </li>
+
+          <li class="bill__item">
+            <span class="bill__no tnum">05</span>
+            <span class="bill__body">
+              <span class="bill__name">The “Not included” list</span>
+              <span class="bill__desc">Three lines that will save you weeks. The cheapest scope-creep insurance you will ever buy.</span>
+            </span>
+            <span class="bill__lead" aria-hidden="true"></span>
+            <span class="bill__count tnum">3 lines</span>
+          </li>
+
+          <li class="bill__item">
+            <span class="bill__no tnum">06</span>
+            <span class="bill__body">
+              <span class="bill__name">A 10-minute pre-send checklist</span>
+              <span class="bill__desc">Eleven checks before you hit send. The last one is the only quality control that actually works.</span>
+            </span>
+            <span class="bill__lead" aria-hidden="true"></span>
+            <span class="bill__count tnum">11 checks</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Credibility: signed, on navy ------------------------------------- -->
+    <section class="signed" aria-labelledby="signed-title">
+      <div class="wrap signed__grid">
+        <div class="signed__col">
+          <h2 id="signed-title" class="kicker">Who it’s for</h2>
+          <p>AI automation freelancers, consultants and agency owners who can build the thing fine — and lose the deal on the paperwork.</p>
+          <p class="signed__note">If you’ve written the same “current situation” paragraph eleven times and rewritten it from scratch on all eleven — this is for you.</p>
+        </div>
+        <div class="signed__col">
+          <h2 class="kicker">Who wrote it</h2>
+          <p>I run a one-person AI consulting practice. This is the actual template I send, not a theoretical one.</p>
+          <p>It’s lifted straight out of my working Notion workspace — which is also where the sample numbers come from.</p>
+          <p class="signature" aria-hidden="true">— Saah</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Close: quieter re-entry ------------------------------------------ -->
+    <section class="close" aria-labelledby="close-title">
+      <div class="wrap measure close__inner">
+        <h2 id="close-title" class="h2">Send me the template.</h2>
+        <p>Delivered as a Notion page you can duplicate into your own workspace, plus a 12-page PDF.</p>
+        <button type="button" class="btn btn--ghost" data-reentry>Send me the template</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot" role="contentinfo">
+    <div class="wrap foot__row">
+      <span class="mark mark--sm"><span class="mark__glyph" aria-hidden="true"></span><span class="mark__text">SAAH</span></span>
+      <p class="foot__meta">One email, immediately. Unsubscribe any time. No sequence you can’t leave.</p>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

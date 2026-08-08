@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face{font-family:"Instrument Sans";src:url("/assets/fonts/instrument-sans-400.woff2") format("woff2");font-weight:400}
+  @font-face{font-family:"Instrument Sans";src:url("/assets/fonts/instrument-sans-600.woff2") format("woff2");font-weight:600}
+  @font-face{font-family:"Instrument Sans";src:url("/assets/fonts/instrument-sans-700.woff2") format("woff2");font-weight:700}
+  @font-face{font-family:"Spectral";src:url("/assets/fonts/spectral-600.woff2") format("woff2");font-weight:600}
+  *{margin:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{position:relative;background:#0F1729;color:#EAEEF6;font-family:"Instrument Sans",sans-serif;
+    padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between}
+  .grid{position:absolute;inset:0;opacity:.5;
+    background-image:linear-gradient(rgba(47,107,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(47,107,255,.18) 1px,transparent 1px);
+    background-size:48px 48px;-webkit-mask-image:radial-gradient(120% 90% at 88% 4%,#000,transparent 68%);
+            mask-image:radial-gradient(120% 90% at 88% 4%,#000,transparent 68%)}
+  .amber-bar{position:absolute;left:-46px;bottom:-70px;width:54px;height:210px;background:#FFB020;
+    transform:rotate(38deg);transform-origin:bottom left;border-radius:6px}
+  .row{position:relative;display:flex;align-items:center;justify-content:space-between}
+  .mark{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.18em;font-size:18px}
+  .mark .g{width:20px;height:26px;background:#EAEEF6;clip-path:polygon(0 0,72% 0,100% 26%,100% 100%,0 100%);position:relative}
+  .mark .g::after{content:"";position:absolute;right:3px;top:4px;width:8px;height:3px;background:#FFB020}
+  .doc{color:#93A0BE;font-size:14px;letter-spacing:.16em;font-weight:600}
+  .free{color:#2F6BFF;font-weight:600;letter-spacing:.16em;font-size:15px;text-transform:uppercase}
+  .main{position:relative;display:flex;align-items:center;gap:56px}
+  .lede{flex:1}
+  .eyebrow{color:#2F6BFF;font-weight:700;letter-spacing:.16em;font-size:16px;text-transform:uppercase;margin-bottom:22px}
+  h1{font-family:"Spectral",serif;font-weight:600;font-size:60px;line-height:1.05;letter-spacing:-.015em;color:#fff;max-width:16ch}
+  .em{font-style:italic}
+  .card{width:390px;flex:0 0 auto;background:#131C33;border:1px solid rgba(47,107,255,.32);border-radius:16px;padding:28px 30px}
+  .cap{display:flex;align-items:center;gap:10px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid rgba(47,107,255,.32);
+    font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#93A0BE;font-weight:600}
+  .cap b{color:#2F6BFF;font-weight:700}
+  .cap .live{margin-left:auto;color:#93A0BE}
+  .k{font-size:15px;color:#93A0BE;margin-bottom:6px}
+  .big{font-family:"Spectral",serif;font-weight:600;font-size:64px;line-height:1;color:#FFB020;letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums}
+  .big small{font-size:24px;color:#FFB020}
+  .against{margin-top:18px;padding-top:16px;border-top:1px dashed rgba(47,107,255,.32);display:flex;justify-content:space-between;align-items:baseline}
+  .against .fee{font-family:"Spectral",serif;font-size:26px;color:#EAEEF6;font-variant-numeric:tabular-nums}
+  .against .once{font-size:13px;color:#93A0BE}
+  .verdict{margin-top:16px;font-family:"Spectral",serif;font-size:19px;color:#fff;text-align:center}
+  .verdict b{color:#FFB020}
+  .foot{position:relative;color:#93A0BE;font-size:17px;display:flex;gap:10px;align-items:center}
+  .foot .dot{width:5px;height:5px;border-radius:50%;background:#2F6BFF}
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="amber-bar"></div>
+
+  <div class="row">
+    <div class="mark"><span class="g"></span>SAAH <span style="color:#39456a">/</span> <span class="doc">PROPOSAL&nbsp;TEMPLATE</span></div>
+    <div class="free">Free template</div>
+  </div>
+
+  <div class="main">
+    <div class="lede">
+      <div class="eyebrow">The proposal that closes on arithmetic</div>
+      <h1>Seven blocks. One worked example. The <span class="em">maths</span> that closes.</h1>
+    </div>
+
+    <div class="card">
+      <div class="cap"><b>Block 02</b> · Cost of inaction <span class="live">live</span></div>
+      <div class="k">Annual cost of inaction</div>
+      <div class="big">$83,200<small> /yr</small></div>
+      <div class="against">
+        <span class="k" style="margin:0">Project fee</span>
+        <span class="fee">$6,800 <span class="once">once</span></span>
+      </div>
+      <div class="verdict">The problem costs <b>12×</b> the fix — every year.</div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="dot"></span> A Notion page you can duplicate · plus a 12-page PDF</div>
+</body>
+</html>

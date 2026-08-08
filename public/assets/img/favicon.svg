@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Saah proposal template">
+  <rect width="32" height="32" rx="7" fill="#0F1729"/>
+  <!-- sheet with a folded amber corner -->
+  <path d="M9 7h9l5 5v13a0 0 0 0 1 0 0H9a0 0 0 0 1 0 0V7z" fill="#EAEEF6"/>
+  <path d="M18 7l5 5h-5z" fill="#FFB020"/>
+  <!-- line items -->
+  <rect x="11.5" y="16"  width="9" height="1.6" rx=".8" fill="#2F6BFF"/>
+  <rect x="11.5" y="19.4" width="9" height="1.6" rx=".8" fill="#9AA6C2"/>
+  <rect x="11.5" y="22.8" width="6" height="1.6" rx=".8" fill="#9AA6C2"/>
+</svg>
