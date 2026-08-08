@@ -241,3 +241,14 @@ function sendTestEmail() {
   sendMagnet_(me);
   for (var i = 1; i < SEQUENCE.length; i++) sendFollowup_(me, SEQUENCE[i]);
 }
+
+// Run ONCE to schedule the daily follow-up sender — no need to open the Triggers screen.
+// (Approve the permission prompt the first time.)
+function installTrigger() {
+  var existing = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < existing.length; i++) {
+    if (existing[i].getHandlerFunction() === 'processSequence') ScriptApp.deleteTrigger(existing[i]);
+  }
+  ScriptApp.newTrigger('processSequence').timeBased().everyDays(1).atHour(8).create();
+  return 'Done — processSequence will run every morning (~8am).';
+}
