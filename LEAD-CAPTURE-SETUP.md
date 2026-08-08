@@ -81,10 +81,39 @@ see delivery at a glance.
 > **Quota:** a consumer Gmail account can send ~100 emails/day via Apps Script (Workspace ~1,500).
 > Fine for a lead magnet; if you expect more, use a dedicated sender.
 
-### Building sequences later
-This same script is the hook for follow-up emails. To drip a sequence, add a time-based trigger
-(**Triggers ⏰ → Add trigger**) that runs a function scanning the sheet's **Status** column and
-emails leads at the right step, updating Status as it goes. Say the word and it can be scaffolded.
+## Follow-up sequence
+
+After the magnet, the script drips a 4-email sequence and tracks each lead in the **Status** column:
+
+| Day | Email | Status after |
+|---|---|---|
+| 0 | The template (magnet) | `New` |
+| 2 | "Block two is the one that closes" (value) | `Seq 1` |
+| 4 | "One price gets compared to nothing" (value) | `Seq 2` |
+| 6 | "The cheapest scope-creep insurance" (value) | `Seq 3` |
+| 8 | **The AI Agency Builder Kit** (pitch) | `Completed` |
+
+`processSequence()` runs daily, looks at each lead's signup timestamp and Status, and sends the next
+email when it's due — one per lead per run, never twice. Set someone's Status to `Unsubscribed` to
+stop their sequence (each email says "just reply and I'll take you off").
+
+**Turn it on (one-time):**
+
+1. Paste the updated `lead-capture.gs`, **Save**.
+2. Left rail **Triggers (⏰) → Add Trigger**:
+   - Function: **`processSequence`**
+   - Event source: **Time-driven**
+   - Type: **Day timer**, ~**8–9am**
+   - **Save.** (No "spreadsheet / On open" trigger — this is a time trigger.)
+3. **Deploy → Manage deployments → ✏️ → Version: New version → Deploy** so the live `/exec` runs the
+   latest code. (No new permissions needed.)
+
+Edit the copy, timing (`day:`), or product link in the `SEQUENCE` array / `CONFIG` at the top of the
+file. Preview everything by running **`sendTestEmail`** — it sends the magnet + all four follow-ups
+to your own address.
+
+> **Quota:** ~100 emails/day on consumer Gmail. Each lead consumes 1 send per sequence step, so a
+> day where many leads hit the same step adds up — fine for normal volume, watch it at scale.
 
 ## Changing things later
 
