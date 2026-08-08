@@ -9,7 +9,7 @@ const CONFIG = {
   // Paste your Google Apps Script Web App URL here (ends in /exec).
   // See LEAD-CAPTURE-SETUP.md. Until it's set, the form still redirects to the
   // download — it just won't record the lead.
-  SHEET_ENDPOINT: "https://script.google.com/macros/s/AKfycby3-0dW8HUXOTMA7beTGzftyuSGdpGAfpRg8KyMTt1P2Ps_zByaAvI-jTqJ_lXrgFSWfA/exec",
+  SHEET_ENDPOINT: "https://script.google.com/macros/s/AKfycby__BQoorvaB4kf7MZHB3BpRCZWDwIkDZ98HP4fXBkwjD9-OM3zBkQsPiLCcGmE9VZP/exec",
 
   // Where the visitor is sent to collect the template.
   GUMROAD_URL: "https://buildwithsaah.gumroad.com/l/ai-agency-proposal-template?layout=profile",
